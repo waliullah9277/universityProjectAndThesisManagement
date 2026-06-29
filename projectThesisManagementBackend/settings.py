@@ -157,3 +157,7 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = "accounts.User"
+
+SIMPLE_JWT = {
+    "BLACKLIST_AFTER_ROTATION": True,
+}

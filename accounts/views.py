@@ -2,12 +2,17 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
-from .serializers import RegisterSerializer, LoginSerializer, UpdateProfileSerializer
+from .serializers import LogoutSerializer, RegisterSerializer, LoginSerializer, UpdateProfileSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from .serializers import UserProfileSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import ChangePasswordSerializer
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from .permissions import IsStudent
 
 # register API view
 class RegisterAPIView(generics.CreateAPIView):
@@ -124,4 +129,36 @@ class ChangePasswordAPIView(APIView):
         return Response({
             "success": True,
             "message": "Password changed successfully."
+        })
+    
+# logout api view   
+class LogoutAPIView(APIView):
+    
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+
+        serializer = LogoutSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
+
+        return Response({
+            "success": True,
+            "message": "Logout successful."
+        })
+
+
+
+# APIView for student only access
+class StudentOnlyAPIView(APIView):
+
+    permission_classes = [IsAuthenticated, IsStudent]
+
+    def get(self, request):
+        return Response({
+            "success": True,
+            "message": "Welcome Student!",
+            "user": request.user.email
         })

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import ChangePasswordAPIView, LoginAPIView, ProfileAPIView, RegisterAPIView, UpdateProfileAPIView
+from .views import ChangePasswordAPIView, LoginAPIView, LogoutAPIView, ProfileAPIView, RegisterAPIView, StudentOnlyAPIView, UpdateProfileAPIView
 
 from rest_framework_simplejwt.views import (TokenRefreshView)
 
@@ -34,5 +34,15 @@ urlpatterns = [
     "change-password/",
     ChangePasswordAPIView.as_view(),
     name="change-password",
+    ),
+    path(
+    "logout/",
+    LogoutAPIView.as_view(),
+    name="logout",
+    ),
+    path(
+    "student-only/",
+    StudentOnlyAPIView.as_view(),
+    name="student-only",
     ),
 ]

@@ -4,6 +4,7 @@ from .services import UserService
 from .models import User, StudentProfile
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -141,3 +142,14 @@ class ChangePasswordSerializer(serializers.Serializer):
         validate_password(attrs["new_password"])
 
         return attrs
+    
+# logout serializer
+class LogoutSerializer(serializers.Serializer):
+    
+    refresh = serializers.CharField()
+
+    def save(self):
+
+        token = RefreshToken(self.validated_data["refresh"])
+
+        token.blacklist()
