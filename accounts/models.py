@@ -32,9 +32,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     phone = models.CharField(max_length=20, blank=True)
 
     role = models.CharField(
-        max_length=20,
-        choices=UserRole.choices
-    )
+    max_length=20,
+    choices=UserRole.choices,
+    default=UserRole.STUDENT
+)
 
     is_active = models.BooleanField(default=True)
 
@@ -56,8 +57,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     blank=True
     )
 
+
     def __str__(self):
         return self.email
+    class Meta:
+        ordering = ["id"]
 
 # student profile models
 class StudentProfile(models.Model):
@@ -70,11 +74,24 @@ class StudentProfile(models.Model):
 
     student_id = models.CharField(max_length=30, unique=True)
 
-    department = models.CharField(max_length=100)
+    # department = models.CharField(max_length=100)
+    department = models.CharField(
+    max_length=100,
+    blank=True,
+    )
+    batch = models.CharField(
+    max_length=20,
+    blank=True,
+    )
 
-    batch = models.CharField(max_length=20)
+    semester = models.CharField(
+        max_length=20,
+        blank=True,
+    )
 
-    semester = models.CharField(max_length=20)
+    # batch = models.CharField(max_length=20)
+
+    # semester = models.CharField(max_length=20)
 
     cgpa = models.DecimalField(
     max_digits=4,
@@ -99,9 +116,18 @@ class SupervisorProfile(models.Model):
         related_name="supervisor_profile"
     )
 
-    designation = models.CharField(max_length=100)
+    # designation = models.CharField(max_length=100)
 
-    department = models.CharField(max_length=100)
+    # department = models.CharField(max_length=100)
+    designation = models.CharField(
+    max_length=100,
+    blank=True,
+    )
+
+    department = models.CharField(
+        max_length=100,
+        blank=True,
+    )
 
     faculty_id = models.CharField(
     max_length=30,
@@ -125,9 +151,18 @@ class ExaminerProfile(models.Model):
         related_name="examiner_profile"
     )
 
-    designation = models.CharField(max_length=100)
+    # designation = models.CharField(max_length=100)
 
-    department = models.CharField(max_length=100)
+    # department = models.CharField(max_length=100)
+    designation = models.CharField(
+    max_length=100,
+    blank=True,
+    )
+
+    department = models.CharField(
+        max_length=100,
+        blank=True,
+    )
 
     faculty_id = models.CharField(
     max_length=30,
