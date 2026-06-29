@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 
+from accounts.validators import validate_phone
+
 from .managers import UserManager
 
 
@@ -48,6 +50,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     REQUIRED_FIELDS = ["first_name", "last_name"]
 
+    phone = models.CharField(
+    max_length=20,
+    validators=[validate_phone],
+    blank=True
+    )
+
     def __str__(self):
         return self.email
 
@@ -68,6 +76,17 @@ class StudentProfile(models.Model):
 
     semester = models.CharField(max_length=20)
 
+    cgpa = models.DecimalField(
+    max_digits=4,
+    decimal_places=2,
+    default=0
+    )
+
+    session = models.CharField(
+        max_length=30,
+        blank=True
+    )
+
     def __str__(self):
         return self.student_id
 
@@ -83,6 +102,16 @@ class SupervisorProfile(models.Model):
     designation = models.CharField(max_length=100)
 
     department = models.CharField(max_length=100)
+
+    faculty_id = models.CharField(
+    max_length=30,
+    blank=True
+    )
+
+    office_room = models.CharField(
+        max_length=30,
+        blank=True
+    )
 
     def __str__(self):
         return self.user.email
@@ -100,5 +129,37 @@ class ExaminerProfile(models.Model):
 
     department = models.CharField(max_length=100)
 
+    faculty_id = models.CharField(
+    max_length=30,
+    blank=True
+    )
+
+    office_room = models.CharField(
+        max_length=30,
+        blank=True
+    )
+
     def __str__(self):
         return self.user.email
+    
+
+avatar = models.ImageField(
+    upload_to="users/avatar/",
+    blank=True,
+    null=True
+)
+
+date_of_birth = models.DateField(
+    blank=True,
+    null=True
+)
+
+gender = models.CharField(
+    max_length=10,
+    blank=True
+)
+
+class Meta:
+    ordering = ["id"]
+    verbose_name = "User"
+    verbose_name_plural = "Users"
